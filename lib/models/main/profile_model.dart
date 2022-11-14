@@ -27,7 +27,7 @@ class ProfileModel extends ChangeNotifier {
     // users/uid/ファイル名 にアップロード
     await storageRef.putFile(file);
     // users/uid/ファイル名 のURLを取得している
-    return storageRef.getDownloadURL();
+    return await storageRef.getDownloadURL();
   }
 
   Future<void> uploadUserImage(

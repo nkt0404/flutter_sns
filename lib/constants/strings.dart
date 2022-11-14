@@ -5,6 +5,8 @@ import 'package:uuid/uuid.dart';
 const String appTitle = "SNS";
 const String signupTitle = "新規登録";
 const String loginTitle = "ログイン";
+const String accountTitle = "アカウント";
+const String themeTitle = "テーマ";
 // texts
 const String mailAddressText = "メールアドレス";
 const String passwordText = "パスワード";
@@ -17,6 +19,8 @@ const String loadingText = "Loading";
 const String usersFieldKey = "users";
 // message
 const String userCreatedMsg = "ユーザーが作成できました";
+// prefs key
+const String isDarkThemePrefsKey = "isDarkTheme";
 // bottom navigation bar
 const String homeText = "Home";
 const String searchText = "Search";
