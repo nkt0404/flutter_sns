@@ -33,7 +33,7 @@ class ProfileModel extends ChangeNotifier {
     // users/uid/ファイル名 にアップロード
     await storageRef.putFile(file);
     // users/uid/ファイル名 のURLを取得している
-    return storageRef.getDownloadURL();
+    return await storageRef.getDownloadURL();
   }
 
   Future<void> uploadUserImage(
@@ -47,62 +47,5 @@ class ProfileModel extends ChangeNotifier {
       'userImageURL': url,
     });
     notifyListeners();
-  }
-
-  Future<void> follow(
-      {required MainModel mainModel,
-      required FirestoreUser passiveFirestoreUser}) async {
-    // settings
-    mainModel.followingUids.add(passiveFirestoreUser.uid);
-    final String tokenId = returnUuidV4();
-    final Timestamp now = Timestamp.now();
-    final FollowingToken followingToken = FollowingToken(
-        createdAt: now, passiveUid: passiveFirestoreUser.uid, tokenId: tokenId);
-    final FirestoreUser activeUser = mainModel.firestoreUser;
-    // 自分がフォローした印
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(activeUser.uid)
-        .collection("tokens")
-        .doc(tokenId)
-        .set(followingToken.toJson());
-    // 受動的なユーザーがフォローされたdataを生成する
-    final Follower follower = Follower(
-        createdAt: now,
-        followedUid: passiveFirestoreUser.uid,
-        followerUid: activeUser.uid);
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(passiveFirestoreUser.uid)
-        .collection("followers")
-        .doc(activeUser.uid)
-        .set(follower.toJson());
-  }
-
-  Future<void> unfollow(
-      {required MainModel mainModel,
-      required FirestoreUser passiveFirestoreUser}) async {
-    mainModel.followingUids.remove(passiveFirestoreUser.uid);
-    // followしているTokenを取得する
-    final FirestoreUser activeUser = mainModel.firestoreUser;
-    // qshotというdataの塊の存在を存在を取得
-    final QuerySnapshot<Map<String, dynamic>> qshot = await FirebaseFirestore
-        .instance
-        .collection("users")
-        .doc(activeUser.uid)
-        .collection("tokens")
-        .where("passiveUid", isEqualTo: passiveFirestoreUser.uid)
-        .get();
-    // 1個しか取得してないけど複数している扱い
-    final List<DocumentSnapshot<Map<String, dynamic>>> docs = qshot.docs;
-    final DocumentSnapshot<Map<String, dynamic>> token = docs.first;
-    await token.reference.delete();
-    // 受動的なユーザーがフォローされたdataを削除する
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(passiveFirestoreUser.uid)
-        .collection("followers")
-        .doc(activeUser.uid)
-        .delete();
   }
 }

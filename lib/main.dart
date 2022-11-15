@@ -88,7 +88,9 @@ class MyHomePage extends ConsumerWidget {
               children: [
                 // 注意：ページじゃないのでScaffold
                 const HomeScreen(),
-                const SearchScreen(),
+                SearchScreen(
+                  mainModel: mainModel,
+                ),
                 ProfileScreen(
                   mainModel: mainModel,
                 ),

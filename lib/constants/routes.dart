@@ -26,9 +26,13 @@ void toAccountPage(
                 )));
 
 void toPassiveUserProfilePage(
-        {required BuildContext context, required FirestoreUser passiveUser}) =>
+        {required BuildContext context,
+        required FirestoreUser passiveUser,
+        required MainModel mainModel}) =>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                PassiveUserProfilePage(passiveUser: passiveUser)));
+            builder: (context) => PassiveUserProfilePage(
+                  passiveUser: passiveUser,
+                  mainModel: mainModel,
+                )));
