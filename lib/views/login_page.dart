@@ -10,6 +10,7 @@ import 'package:flutter_sns/details/rounded_button.dart';
 import 'package:flutter_sns/models/login_model.dart';
 // constants
 import 'package:flutter_sns/constants/strings.dart';
+import 'package:flutter_sns/constants/routes.dart' as routes;
 
 class LoginPage extends ConsumerWidget {
   const LoginPage({
@@ -50,6 +51,9 @@ class LoginPage extends ConsumerWidget {
               widthRate: 0.85,
               color: Colors.green,
               text: loginText),
+          TextButton(
+              onPressed: () => routes.toSignupPage(context: context),
+              child: const Text(noAccountMsg)),
         ],
       ),
     );
